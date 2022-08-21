@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
-const mongUrl = "mongodb://localhost:27017/";
+const mongoUrl = process.env.MONGO_URL;
+
+console.log(mongoUrl);
 
 const conectToMongo = () => {
-  mongoose.connect(mongUrl, () => {
+  mongoose.connect(mongoUrl, () => {
     console.log("conected to mongo succesfully");
   });
 };

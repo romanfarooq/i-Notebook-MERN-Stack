@@ -1,11 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const User = require("../models/User");
-const { body, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const fetchUser = require("../middleware/fetchUser");
+import express from "express";
+import User from "../models/User.js";
+import fetchUser from "../middleware/fetchUser.js";
+import { body, validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
 
 router.post(
@@ -26,11 +26,11 @@ router.post(
           .json({ error: "A user with this email already exists" });
       }
       const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(req.body.password, salt);
+      const hashPass = await bcrypt.hash(req.body.password, salt);
       const user = await User.create({
         name: req.body.name,
         email: req.body.email,
-        password: hash,
+        password: hashPass,
       });
       const token = jwt.sign({ id: user.id }, JWT_SECRET);
       res.json({ token });
@@ -82,4 +82,4 @@ router.post("/get-user", fetchUser, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

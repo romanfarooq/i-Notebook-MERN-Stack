@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
 
 const fetchUser = (req, res, next) => {
@@ -15,4 +15,4 @@ const fetchUser = (req, res, next) => {
   }
 };
 
-module.exports = fetchUser;
+export default fetchUser;

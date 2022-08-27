@@ -18,7 +18,7 @@ router.get("/fetch-notes", fetchUser, async (req, res) => {
 router.post(
   "/add-note",
   body("title", "Enter a valid title").isLength({ min: 3 }),
-  body("discription", "Discription should at least have 5 characters").isLength({ min: 5 }),
+  body("description", "Discription should at least have 5 characters").isLength({ min: 5 }),
   fetchUser,
   async (req, res) => {
     const errors = validationResult(req);
@@ -26,13 +26,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const note = await Note.create({
+      await Note.create({
         user: req.user,
         title: req.body.title,
-        description: req.body.discription,
+        description: req.body.description,
         tag: req.body.tag,
       });
-      res.json(note);
+      res.json({ success: "Note has been added" });
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: "Internal Server Error" });
@@ -60,12 +60,12 @@ router.put("/update-note/:id", fetchUser, async (req, res) => {
     if (note.user.toString() !== req.user) {
       return res.status(401).send("Not Allowed");
     }
-    note = await Note.findByIdAndUpdate(
+    await Note.findByIdAndUpdate(
       req.params.id,
       { $set: newNote },
       { new: true }
     );
-    res.json({ note });
+    res.json({ success: "Note has been updated" });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -81,8 +81,7 @@ router.delete("/delete-note/:id", fetchUser, async (req, res) => {
     if (note.user.toString() !== req.user) {
       return res.status(401).json({ error: "Not Allowed" });
     }
-    note = await Note.findOneAndDelete(req.params.id);
-    console.log(req.params.id);
+    await Note.deleteOne({ _id: req.params.id});
     res.json({ success: "Note has been deleted" });
   } catch (error) {
     console.error(error.message);

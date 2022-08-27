@@ -9,7 +9,7 @@ function AddNote() {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
   const handleSubmit = () => {
-    addNote(note.title, note.description, note.tag);
+    addNote(note);
   };
   return (
     <>

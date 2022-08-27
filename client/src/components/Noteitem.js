@@ -14,7 +14,6 @@ function Noteitem({ note }) {
             <i className="fa-regular fa-pen-to-square"></i>
             <i className="fa-solid fa-trash-can" onClick={() => deleteNote(note._id)}></i>
           </div>
-          <p>{note._id}</p>
         </div>
       </div>
     </div>

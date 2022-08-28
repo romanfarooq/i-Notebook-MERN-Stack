@@ -38,8 +38,10 @@ export const NoteProvider = ({ children }) => {
         },
         body: JSON.stringify(note),
       });
-      if (!response.ok) {
-        console.log(await response.json());
+      if (response.ok) {
+        setNotes(notes.concat(await response.json()));
+      } else {
+        console.error(await response.json());
       }
     } catch (error) {
       console.error(error.message);
@@ -57,8 +59,11 @@ export const NoteProvider = ({ children }) => {
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMDE2YTU5NzY2OTc2MDRjMzQ4ZmFmYiIsImlhdCI6MTY2MTUyMjU4N30.8qedmYTCLEFwS9lNCUxqpZscM4tWBWpCOAo8_hZHaBs",
         },
       });
-      if (!response.ok) {
-        console.log(await response.json());
+      if (response.ok) {
+        const newNotes = notes.filter((note) => note._id !== id);
+        setNotes(newNotes);
+      } else {
+        console.error(await response.json());
       }
     } catch (error) {
       console.error(error.message);
@@ -77,8 +82,17 @@ export const NoteProvider = ({ children }) => {
         },
         body: JSON.stringify({ title, description, tag }),
       });
-      if (!response.ok) {
-        console.log(await response.json());
+      if (response.ok) {
+        for (let index = 0; index < notes.length; index++) {
+          const element = notes[index];
+          if (element._id === id) {
+            element.title = title;
+            element.description = description;
+            element.tag = tag;
+          }
+        }
+      } else {
+        console.error(await response.json());
       }
     } catch (error) {
       console.error(error.message);

@@ -26,13 +26,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      await Note.create({
+      const note = await Note.create({
         user: req.user,
         title: req.body.title,
         description: req.body.description,
         tag: req.body.tag,
       });
-      res.json({ success: "Note has been added" });
+      res.json(note);
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: "Internal Server Error" });

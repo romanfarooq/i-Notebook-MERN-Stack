@@ -9,7 +9,7 @@ function Home() {
   useEffect(() => {
     getNotes();
     // eslint-disable-next-line
-  }, [notes]);
+  }, []);
   return (
     <div className="container">
       <AddNote />

@@ -18,7 +18,7 @@ router.get("/fetch-notes", fetchUser, async (req, res) => {
 router.post(
   "/add-note",
   body("title", "Enter a valid title").isLength({ min: 3 }),
-  body("description", "Discription should at least have 5 characters").isLength({ min: 5 }),
+  body("description", "description should at least have 5 characters").isLength({ min: 5 }),
   fetchUser,
   async (req, res) => {
     const errors = validationResult(req);
@@ -41,14 +41,14 @@ router.post(
 );
 
 router.put("/update-note/:id", fetchUser, async (req, res) => {
-  const { title, discription, tag } = req.body;
+  const { title, description, tag } = req.body;
   const newNote = {};
   try {
     if (title) {
       newNote.title = title;
     }
-    if (discription) {
-      newNote.description = discription;
+    if (description) {
+      newNote.description = description;
     }
     if (tag) {
       newNote.tag = tag;
@@ -60,11 +60,7 @@ router.put("/update-note/:id", fetchUser, async (req, res) => {
     if (note.user.toString() !== req.user) {
       return res.status(401).send("Not Allowed");
     }
-    await Note.findByIdAndUpdate(
-      req.params.id,
-      { $set: newNote },
-      { new: true }
-    );
+    await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
     res.json({ success: "Note has been updated" });
   } catch (error) {
     console.error(error.message);
@@ -81,7 +77,7 @@ router.delete("/delete-note/:id", fetchUser, async (req, res) => {
     if (note.user.toString() !== req.user) {
       return res.status(401).json({ error: "Not Allowed" });
     }
-    await Note.deleteOne({ _id: req.params.id});
+    await Note.findByIdAndDelete(req.params.id)
     res.json({ success: "Note has been deleted" });
   } catch (error) {
     console.error(error.message);

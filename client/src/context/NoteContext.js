@@ -3,12 +3,15 @@ import { createContext, useState } from "react";
 const NoteContext = createContext();
 
 export const NoteProvider = ({ children }) => {
-  const host = "http://localhost:5000";
+
+  const HOST = process.env.SERVER_URL || "http://localhost:5000";
+  console.log(HOST);
   const [notes, setNotes] = useState([]);
+
   const getNotes = async () => {
-    const url = `${host}/api/note/fetch-notes`;
+    const URL = `${HOST}/api/note/fetch-notes`;
     try {
-      const response = await fetch(url, {
+      const response = await fetch(URL, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -17,9 +20,11 @@ export const NoteProvider = ({ children }) => {
         },
       });
       if (response.ok) {
-        setNotes(await response.json());
+        const json = await response.json();
+        setNotes(json);
       } else {
-        console.error(await response.json());
+        const json = await response.json();
+        console.error(json);
       }
     } catch (error) {
       console.error(error.message);
@@ -27,9 +32,9 @@ export const NoteProvider = ({ children }) => {
   };
 
   const addNote = async (note) => {
-    const url = `${host}/api/note/add-note`;
+    const URL = `${HOST}/api/note/add-note`;
     try {
-      const response = await fetch(url, {
+      const response = await fetch(URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,9 +44,11 @@ export const NoteProvider = ({ children }) => {
         body: JSON.stringify(note),
       });
       if (response.ok) {
-        setNotes(notes.concat(await response.json()));
+        const note = await response.json();
+        setNotes(notes.concat(note));
       } else {
-        console.error(await response.json());
+        const json = await response.json();
+        console.error(json);
       }
     } catch (error) {
       console.error(error.message);
@@ -49,9 +56,9 @@ export const NoteProvider = ({ children }) => {
   };
 
   const deleteNote = async (id) => {
-    const url = `${host}/api/note/delete-note/${id}`;
+    const URL = `${HOST}/api/note/delete-note/${id}`;
     try {
-      const response = await fetch(url, {
+      const response = await fetch(URL, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +70,8 @@ export const NoteProvider = ({ children }) => {
         const newNotes = notes.filter((note) => note._id !== id);
         setNotes(newNotes);
       } else {
-        console.error(await response.json());
+        const json = await response.json();
+        console.error(json);
       }
     } catch (error) {
       console.error(error.message);
@@ -71,9 +79,9 @@ export const NoteProvider = ({ children }) => {
   };
 
   const editNote = async (id, title, description, tag) => {
-    const url = `${host}/api/note/update-note/${id}`;
+    const URL = `${HOST}/api/note/update-note/${id}`;
     try {
-      const response = await fetch(url, {
+      const response = await fetch(URL, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -83,16 +91,19 @@ export const NoteProvider = ({ children }) => {
         body: JSON.stringify({ title, description, tag }),
       });
       if (response.ok) {
-        for (let index = 0; index < notes.length; index++) {
-          const element = notes[index];
-          if (element._id === id) {
-            element.title = title;
-            element.description = description;
-            element.tag = tag;
+        let newNotes = JSON.parse(JSON.stringify(notes));
+        for (let index = 0; index < newNotes.length; index++) {
+          if (newNotes[index]._id === id) {
+            newNotes[index].title = title;
+            newNotes[index].description = description;
+            newNotes[index].tag = tag;
+            break;
           }
         }
+        setNotes(newNotes);
       } else {
-        console.error(await response.json());
+        const json = await response.json();
+        console.error(json);
       }
     } catch (error) {
       console.error(error.message);
@@ -100,9 +111,7 @@ export const NoteProvider = ({ children }) => {
   };
 
   return (
-    <NoteContext.Provider
-      value={{ notes, getNotes, addNote, deleteNote, editNote }}
-    >
+    <NoteContext.Provider value={{ notes, getNotes, addNote, deleteNote, editNote }}>
       {children}
     </NoteContext.Provider>
   );

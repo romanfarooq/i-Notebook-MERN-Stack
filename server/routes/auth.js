@@ -21,9 +21,7 @@ router.post(
     try {
       const flag = await User.findOne({ email: req.body.email });
       if (flag) {
-        return res
-          .status(400)
-          .json({ error: "A user with this email already exists" });
+        return res.status(400).json({ error: "A user with this email already exists" });
       }
       const salt = await bcrypt.genSalt(10);
       const hashPass = await bcrypt.hash(req.body.password, salt);
@@ -73,8 +71,7 @@ router.post(
 
 router.post("/get-user", fetchUser, async (req, res) => {
   try {
-    let userId = req.user;
-    const data = await User.findById(userId).select("-password");
+    const data = await User.findById(req.user).select("-password");
     res.send(data);
   } catch (error) {
     console.error(error.message);

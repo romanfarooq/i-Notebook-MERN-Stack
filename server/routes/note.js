@@ -17,8 +17,9 @@ router.get("/fetch-notes", fetchUser, async (req, res) => {
 
 router.post(
   "/add-note",
-  body("title", "Enter a valid title").isLength({ min: 3 }),
-  body("description", "description should at least have 5 characters").isLength({ min: 5 }),
+  body("title", "Enter a valid title").exists(),
+  body("description", "Enter a valid description").exists(),
+  body("tag", "Enter a vslid tag").exists(),
   fetchUser,
   async (req, res) => {
     const errors = validationResult(req);

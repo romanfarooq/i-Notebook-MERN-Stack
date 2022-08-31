@@ -5,7 +5,6 @@ const NoteContext = createContext();
 export const NoteProvider = ({ children }) => {
 
   const HOST = process.env.SERVER_URL || "http://localhost:5000";
-  console.log(HOST);
   const [notes, setNotes] = useState([]);
 
   const getNotes = async () => {

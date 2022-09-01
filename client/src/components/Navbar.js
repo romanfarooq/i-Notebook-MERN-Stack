@@ -1,10 +1,13 @@
+import { useContext } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import NoteContext from "../context/NoteContext";
 import Alert from "./Alert";
 
 function Navbar() {
 
   const location = useLocation();
-
+  const context = useContext(NoteContext)
+  const { alert } = context;
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -29,7 +32,7 @@ function Navbar() {
           </div>
         </div>
       </nav>
-      <Alert message="Hello World!" />
+      <Alert alert={alert} />
       <Outlet />
     </>
   );

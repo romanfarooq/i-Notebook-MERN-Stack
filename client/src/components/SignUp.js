@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NoteContext from "../context/NoteContext";
 
 function SignUp() {
+
+  const navigate = useNavigate();
+  const context = useContext(NoteContext)
+  const { showAlert } = context;
 
   const [user, setUser] = useState({
     name: "",
@@ -9,8 +14,6 @@ function SignUp() {
     password: "",
     cpassword: ""
   });
-
-  const navigate = useNavigate();
 
   const onChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -33,8 +36,9 @@ function SignUp() {
           const json = await response.json();
           localStorage.setItem("auth-token", json.authtoken);
           navigate("/");
+          showAlert("Account Created Successfully", "success");
         } else {
-          alert("Invalid User Information");
+          showAlert("Invalid User Information", "danger");
         }
       } catch (error) {
         console.error(error.message);

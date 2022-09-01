@@ -9,18 +9,17 @@ function Note() {
   const { notes, getNotes, editNote } = context;
   const ref = useRef(null);
   const refClose = useRef(null);
-
-  useEffect(() => {
-    getNotes();
-    // eslint-disable-next-line
-  }, []);
-
   const [note, setNote] = useState({
     id: "",
     title: "",
     description: "",
     tag: "",
   });
+
+  useEffect(() => {
+    getNotes();
+    // eslint-disable-next-line
+  }, []);
 
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });

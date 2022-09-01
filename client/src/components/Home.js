@@ -1,8 +1,8 @@
-import Note from "./Note";
+import Notes from "./Notes";
 
 function Home() {
   return (
-    <Note />
+    <Notes />
   );
 }
 

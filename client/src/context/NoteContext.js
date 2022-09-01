@@ -6,6 +6,17 @@ export const NoteProvider = ({ children }) => {
 
   const HOST = process.env.SERVER_URL || "http://localhost:5000";
   const [notes, setNotes] = useState([]);
+  const [alert, setAlert] = useState(null);
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
 
   const getNotes = async () => {
     const URL = `${HOST}/api/note/fetch-notes`;
@@ -45,6 +56,7 @@ export const NoteProvider = ({ children }) => {
       if (response.ok) {
         const note = await response.json();
         setNotes(notes.concat(note));
+        showAlert("Added Successfully", "success")
       } else {
         const json = await response.json();
         console.error(json);
@@ -68,6 +80,7 @@ export const NoteProvider = ({ children }) => {
       if (response.ok) {
         const newNotes = notes.filter((note) => note._id !== id);
         setNotes(newNotes);
+        showAlert("Deleted Successfully", "success");
       } else {
         const json = await response.json();
         console.error(json);
@@ -100,6 +113,7 @@ export const NoteProvider = ({ children }) => {
           }
         }
         setNotes(newNotes);
+        showAlert("Updated Succesfully", "success")
       } else {
         const json = await response.json();
         console.error(json);
@@ -110,7 +124,7 @@ export const NoteProvider = ({ children }) => {
   };
 
   return (
-    <NoteContext.Provider value={{ notes, getNotes, addNote, deleteNote, editNote }}>
+    <NoteContext.Provider value={{ notes, getNotes, addNote, deleteNote, editNote, alert, showAlert }}>
       {children}
     </NoteContext.Provider>
   );

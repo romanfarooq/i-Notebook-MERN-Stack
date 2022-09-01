@@ -1,13 +1,21 @@
 import { useContext } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import NoteContext from "../context/NoteContext";
 import Alert from "./Alert";
 
 function Navbar() {
 
   const location = useLocation();
+  const navigate = useNavigate();
   const context = useContext(NoteContext)
-  const { alert } = context;
+  const { alert, showAlert } = context;
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+    showAlert("Logged out Succesfully", "success");
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,10 +33,14 @@ function Navbar() {
                 <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <Link className="btn btn-primary mx-2" to="/login" role="button">Login</Link>
-              <Link className="btn btn-primary mx-2" to="/sign-up" role="button">SignUp</Link>
-            </form>
+            {localStorage.getItem("token") ? (
+              <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
+            ) : (
+              <form className="d-flex" role="search">
+                <Link className="btn btn-primary mx-2" to="/login" role="button">Login</Link>
+                <Link className="btn btn-primary mx-2" to="/sign-up" role="button" >SignUp</Link>
+              </form>
+            )}
           </div>
         </div>
       </nav>

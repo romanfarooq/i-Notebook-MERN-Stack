@@ -34,7 +34,7 @@ function SignUp() {
         );
         if (response.ok) {
           const json = await response.json();
-          localStorage.setItem("auth-token", json.authtoken);
+          localStorage.setItem("token", json.authtoken);
           navigate("/");
           showAlert("Account Created Successfully", "success");
         } else {
@@ -44,15 +44,16 @@ function SignUp() {
         console.error(error.message);
       }
     } else {
-      alert("Your password and confirmation password do not match");
+      showAlert("Your password and confirmation password do not match", "danger");
     }
   }
 
   return (
     <div className="container">
+      <h2>Create an account to use iNotebook</h2>
       <form onSubmit={handleSubmit}>
       <div className="mb-3">
-          <label htmlFor="text" className="form-label">Email address</label>
+          <label htmlFor="text" className="form-label">Name</label>
           <input type="name" className="form-control" id="name" name="name" value={user.name} onChange={onChange} minLength={3} required />
         </div>
         <div className="mb-3">
@@ -62,11 +63,11 @@ function SignUp() {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input type="password" className="form-control" id="password" name="password" value={user.password} onChange={onChange} minLength={5} required />
+          <input type="password" className="form-control" id="password" name="password" value={user.password} onChange={onChange} autoComplete="off" minLength={5} required />
         </div>
         <div className="mb-3">
           <label htmlFor="cpassword" className="form-label">Confirm Password</label>
-          <input type="password" className="form-control" id="cpassword" name="cpassword" value={user.cpassword} onChange={onChange} minLength={5} required />
+          <input type="password" className="form-control" id="cpassword" name="cpassword" value={user.cpassword} onChange={onChange} autoComplete="off" minLength={5} required />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>

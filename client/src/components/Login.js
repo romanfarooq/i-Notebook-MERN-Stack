@@ -25,7 +25,7 @@ function Login() {
       });
       if (response.ok) {
         const json = await response.json();
-        localStorage.setItem("auth-token", json.authtoken);
+        localStorage.setItem("token", json.authtoken);
         navigate("/");
         showAlert("Logged In Successfully", "success");
       } else {
@@ -38,6 +38,7 @@ function Login() {
 
   return (
     <div className="container">
+      <h2>Login to Continue to iNotebook</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email address</label>
@@ -46,7 +47,7 @@ function Login() {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input type="password" className="form-control" id="password" name="password" value={credentials.password} onChange={onChange} />
+          <input type="password" className="form-control" id="password" name="password" value={credentials.password} autoComplete="off" onChange={onChange} />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>

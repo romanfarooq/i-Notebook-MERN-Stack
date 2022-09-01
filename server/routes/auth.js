@@ -53,15 +53,12 @@ router.post(
       if (!user) {
         return res.status(400).json({ error: "Enter correct username" });
       }
-      const comparePass = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
+      const comparePass = await bcrypt.compare(req.body.password, user.password);
       if (!comparePass) {
         return res.status(400).json({ error: "Enter correct password" });
       }
-      const token = jwt.sign({ id: user.id }, JWT_SECRET);
-      res.json({ token });
+      const authtoken = jwt.sign({ id: user.id }, JWT_SECRET);
+      res.json({ authtoken });
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: "Internal Server Error" });

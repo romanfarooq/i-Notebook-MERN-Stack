@@ -34,12 +34,11 @@ function Note() {
       description: currentNote.description,
       tag: currentNote.tag,
     });
-    console.log(note);
   }
 
-  const handleEditClick = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     editNote(note.id, note.title, note.description, note.tag);
-    refClose.current.click();
   }
 
   return (
@@ -53,29 +52,26 @@ function Note() {
               <h5 className="modal-title" id="exampleModalLabel">Edit Note</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form onSubmit={handleSubmit}>
             <div className="modal-body">
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">Title</label>
-                <input type="text" className="form-control" id="title" name="title" value={note.title} onChange={onChange} />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="tag" className="form-label">Tag</label>
-                <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="description" className="form-label">Description</label>
-                <input type="text" className="form-control" id="description" name="description" value={note.description} onChange={onChange} />
-              </div>
+                <div className="mb-3">
+                  <label htmlFor="title" className="form-label">Title</label>
+                  <input type="text" className="form-control" id="title" name="title" value={note.title} onChange={onChange} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="tag" className="form-label">Tag</label>
+                  <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="description" className="form-label">Description</label>
+                  <input type="text" className="form-control" id="description" name="description" value={note.description} onChange={onChange} required />
+                </div>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" ref={refClose}>Close</button>
-              <button 
-              type="button" className="btn btn-primary" data-dismiss="model" onClick={handleEditClick}
-              disabled={note.title.length === 0 || note.description.length === 0 || note.tag.length === 0}
-              >
-                Save Changes
-              </button>
+              <button type="sumbit" className="btn btn-primary" data-dismiss="model" onClick={() => !Object.values(note).includes("") && refClose.current.click()}>Save Changes</button>
             </div>
+            </form>
           </div>
         </div>
       </div>

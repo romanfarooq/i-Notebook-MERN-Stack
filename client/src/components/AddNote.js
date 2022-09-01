@@ -7,7 +7,8 @@ function AddNote() {
   const { addNote } = context;
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     addNote(note);
     setNote({ title: "", description: "", tag: "" })
   }
@@ -19,25 +20,20 @@ function AddNote() {
   return (
     <>
       <h3>Add Note</h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">Title</label>
-          <input type="text" className="form-control" id="title" name="title" value={note.title} onChange={onChange} />
+          <input type="text" className="form-control" id="title" name="title" value={note.title} onChange={onChange} required />
         </div>
         <div className="mb-3">
           <label htmlFor="tag" className="form-label">Tag</label>
-          <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} />
+          <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} required />
         </div>
         <div className="mb-3">
           <label htmlFor="description" className="form-label">Description</label>
-          <input type="text" className="form-control" id="description" name="description" value={note.description} onChange={onChange} />
+          <input type="text" className="form-control" id="description" name="description" value={note.description} onChange={onChange} required />
         </div>
-        <button 
-        type="button" className="btn btn-primary" onClick={handleSubmit}
-        disabled={note.title.length === 0 || note.description.length === 0 || note.tag.length === 0}
-        >
-          Add Note
-        </button>
+        <button type="submit" className="btn btn-primary">Add Note</button>
       </form>
     </>
   );
